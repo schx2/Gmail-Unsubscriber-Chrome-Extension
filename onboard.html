@@ -1,0 +1,120 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">    
+    <title>Gmail Unsubscriber</title>
+    
+    <!-- Scripts -->
+    <script src="assets/jquery-2.0.3.min.js"></script>
+    <script src="assets/bootstrap.min.js"></script>
+    <script src="background.js"></script>
+    <script src="ga.js"></script>
+    <script src="onboard.js"></script>
+    
+    <!-- Cascading Style Sheets -->
+    <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="css/onboard.css" rel="stylesheet" media="screen">    
+  </head>
+  
+  <body>
+   <div class="container">
+      <div class="header clearfix">
+        <nav>
+          <ul class="nav nav-tabs nav-pills pull-right" role="tablist" id='tab-menu'>
+            <li role="presentation" class="active"><a href="#h"  data-toggle="tab">Home</a></li>
+            <li role="presentation"><a href="#p" data-toggle="tab">Privacy</a></li>
+            <li role="presentation"><a href="#c" data-toggle="tab">Contact</a></li>
+          </ul>
+        </nav>
+        <h3 class="text-muted">Gmail Unsubscriber</h3>
+      </div>
+
+      <div class="tab-content">
+         <div role="tabpanel" class="tab-pane fade in active" id="h">
+            <div class="jumbotron">
+              <h2>Unsubscribe from  emails in 1 click.</h2>
+              <p class="lead" id='intro'>Gmail Unsubscriber needs access to Gmail<br>to find unsubscribe links</p>
+              <p><a id="access-gmail" class="btn btn-lg btn-success" href="#" role="button">Authorize access to Gmail</a></p>
+            </div>
+
+            <div class="row marketing" id='onboard-unauthenticated'>
+               <div class="col-lg-6">
+                  <h4>1. Authorize</h4>
+                  <p>Gmail Unsubscriber needs access to Gmail to find unsubscribe links</p>
+
+                  <h4>2. Go on Gmail</h4>
+                  <p>Browse your emails</p>
+
+                  <h4>3. Start unsubscribing</h4>
+                  <p>Find the "unsubscribe" buttons to the right of your emails in which a link to unsubscribe has been found (mostly in Social, Promotions & Updates tabs).</p>
+                  <img id="cover" src="img/cover-cropped.png" class="img-responsive">
+               </div>
+            </div>
+
+            <div class="row marketing" id='onboard-authenticated'>
+               <div class="col-12">
+                  <div class='row'>
+                     <div class="col-3 text-center">
+                        <span class="metric-data h1" id="emails-read"></span><br>
+                        <span class="metric-label">Emails analyzed</span>
+                     </div>
+                     <div class="col-3 text-center">
+                        <span class="metric-data h1" id="emails-unsub-links"></span><br>
+                        <span class="metric-label">Unsubscribe links found</span>
+                     </div>
+                     <div class="col-3 text-center">
+                        <span class="metric-data h1" id="emails-unsub-clicks"></span><br>
+                        <span class="metric-label">Unsubscribe links clicked</span>
+                     </div>
+                     <div class="col-3 text-center">
+                        <span class="metric-data h1" id="emails-archived"></span><br>
+                        <span class="metric-label">Archived emails after unsubscription</span>
+                     </div>
+                  </div>
+               </div>
+            </div>
+
+            <footer class="footer" style="margin-top: 25px;">
+              <p>I love to clean – Jackie Chan</p>
+            </footer>
+         </div>
+
+
+
+         
+         <div role="tabpanel" class="tab-pane fade" id="p">
+            <h3>Privacy</h3>
+               <p class='lead'>We don't care about your emails</p>
+               <div class="col-lg-6">
+                 <h4>1. We don't store your emails</h4>
+                 <p>Gmail Unsubscriber needs to read your emails to find links that will let you unsubscribe easily from non desired emails. However, the beauty of chrome extensions is that our code is stored and runs on your machine. That means that we don't need a server to process your emails and therefore, we don't store anything externally about you or your emails.</p>
+
+                 <h4>2. We don't share your emails</h4>
+                 <p>Gmail Unsubscriber doesn't share your emails with any third party. We use <a href='https://www.inboxsdk.com' target='_blank'>InboxSDK</a>'s library as a high-level Javascript API to build our desired behavior on top of Gmail. That way, we don't need to reinvent the wheel - it is particularly well maintained, it takes care of edge-cases and is performant. They can't read your emails, they don't have access to your Gmail token and <a href='https://www.inboxsdk.com/terms' target='_blank'>they won't share any data</a> that could identify you.</p>
+
+                 <h4>3. Check by yourself</h4>
+                 <p>Nothing is worth a personal inspection. <a href='http://stackoverflow.com/questions/3958371/chrome-firefox-access-source-of-an-extension?noredirect=1&lq=1' target="_blank">Have a look</a> at our unobfuscated code (it might be ugly though but hey, this is still a work in progress).</p>
+               </div>
+
+            <footer class="footer">
+              <p>Eventually all things are known. And few matter. – Gore Vidal</p>
+            </footer>
+         </div>
+         <div role="tabpanel" class="tab-pane fade" id="c">
+            <h3>Contact</h3>
+            <p class='lead'>Any question/problem/concern/request/thing else ?</p>
+            <p>Feel free to drop me a line: sacha.schmitz@gmail.com</p>
+            <p>You can also <a href='https://chrome.google.com/webstore/detail/gmail-unsubscriber/dnopodhjnogpbfdglicgokkkmlfldbap/reviews' target='_blank'>rate this extension</a> in the Chrome webstore.</p>
+            <footer class="footer">
+              <p>The letters from jail are always disconcerting. – Eliza Dushku</p>
+            </footer>
+         </div>
+
+         
+        </div>
+      
+
+
+    </div> <!-- /container -->
+  </body>
+</html>
