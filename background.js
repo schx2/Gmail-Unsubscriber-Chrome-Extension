@@ -17,6 +17,11 @@ chrome.runtime.onInstalled.addListener(function(details){
   }
 });
 
+chrome.tabs.onCreated.addListener(function(tab){
+  //chrome.tabs.remove(tab.id)
+  console.log(tab);
+})
+
 function getAuthTokenMessage(options){
   chrome.identity.getAuthToken({ 'interactive': false}, getAuthTokenMessageCallback);
 }
@@ -510,17 +515,30 @@ chrome.runtime.onConnect.addListener(function(port) {
       }
     })
   }
+  else if (port.name == "sendEmail") {
+    port.onMessage.addListener(function(msg){
+      if (typeof msg.email !== 'undefined'){
+        console.log(msg.email);
+        sendUnsubEmail("sacha.schmitz@gmail.com")
+      }
+    });
+  }
+
   else if(port.name == "analytics"){
     port.onMessage.addListener(function(msg){
-      if (typeof msg.emailsRead !== 'undefined' && msg.unsubLinksFound !== 'undefined'){
+      console.log("read",msg.emailsRead);
+      console.log("unsub",msg.unsubLinksFound);
+      console.log("unsubmail",msg.unsubLinksMailFound);
+      if (typeof msg.emailsRead !== 'undefined' && msg.unsubLinksFound !== 'undefined' && msg.unsubLinksMailFound !== 'undefined'){
         var manifest = chrome.runtime.getManifest();
-        console.log(msg.emailsRead)
-        gaGUemails(msg.emailsRead, msg.unsubLinksFound, manifest.version)
+
+        gaGUemails(msg.emailsRead, msg.unsubLinksFound, msg.unsubLinksMailFound, manifest.version)
 
         chrome.storage.sync.get(['emailsRead', 'unsubLinksFound'], function(items) {
           var emailsRead = items.emailsRead ? items.emailsRead + msg.emailsRead : msg.emailsRead;
           var unsubLinksFound =  items.unsubLinksFound ? items.unsubLinksFound + msg.unsubLinksFound : msg.unsubLinksFound;
-          chrome.storage.sync.set({'emailsRead': emailsRead, 'unsubLinksFound': unsubLinksFound}, function() {
+          var unsubLinksMailFound =  items.unsubLinksMailFound ? items.unsubLinksMailFound + msg.unsubLinksMailFound : msg.unsubLinksMailFound;
+          chrome.storage.sync.set({'emailsRead': emailsRead, 'unsubLinksFound': unsubLinksFound, 'unsubLinksMailFound': unsubLinksMailFound}, function() {
           });
         })
       }

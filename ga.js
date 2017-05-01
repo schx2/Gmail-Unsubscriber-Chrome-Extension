@@ -16,7 +16,7 @@ var _AnalyticsCode = 'UA-87680024-1';
  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga'); // Note: https protocol here
 
  ga('create', _AnalyticsCode, 'auto');
- ga('set', 'checkProtocolTask', null); 
+ ga('set', 'checkProtocolTask', null);
  ga('require', 'displayfeatures');
 
 
@@ -53,7 +53,7 @@ function gaGmailAuthenticationSuccess(){
   });
 }
 
-function gaGUemails(emailsRead, unsubLinksFound, version) {  
+function gaGUemails(emailsRead, unsubLinksFound, unsubLinksMailFound, version) {
   if (emailsRead !== 0){
     ga('send', 'event', {
       'eventCategory': 'GU-data',
@@ -67,6 +67,13 @@ function gaGUemails(emailsRead, unsubLinksFound, version) {
       'eventCategory': 'GU-data',
       'eventAction': 'unsub-links-found',
       'eventValue': unsubLinksFound
+    });
+  }
+  if(unsubLinksMailFound !== 0){
+    ga('send', 'event', {
+      'eventCategory': 'GU-data',
+      'eventAction': 'unsub-links-mail-found',
+      'eventValue': unsubLinksMailFound
     });
   }
 }
