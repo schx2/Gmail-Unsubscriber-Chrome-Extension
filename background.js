@@ -363,6 +363,9 @@ function isMailto(str){
 }
 
 function sendUnsubEmail(email){
+  //remove anything after "?" to catch "?subject=unsubscribe"
+  var n = email.indexOf('?');
+  email = email.substring(0, n != -1 ? n : email.length);
 
   function sendEmail(mail) {
     return result = new Promise(function(resolve, reject) {
