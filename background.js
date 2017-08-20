@@ -363,9 +363,6 @@ function isMailto(str){
 }
 
 function sendUnsubEmail(email){
-  //remove anything after "?" to catch "?subject=unsubscribe"
-  var n = email.indexOf('?');
-  email = email.substring(0, n != -1 ? n : email.length);
 
   function sendEmail(mail) {
     return result = new Promise(function(resolve, reject) {
@@ -445,6 +442,10 @@ chrome.runtime.onConnect.addListener(function(port) {
                 var link = linksListUnsubscribe[i].slice(1,-1);
                 if(isMailto(link)){
                   var email = link.slice(7);
+                  //remove anything after "?" to catch "?subject=unsubscribe"
+                  var n = email.indexOf('?');
+                  email = email.substring(0, n != -1 ? n : email.length);
+                  
                   var type = "mailto";
                 }
                 else if (isURL(link)){
