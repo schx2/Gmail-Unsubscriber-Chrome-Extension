@@ -14,25 +14,39 @@ InboxSDK.load('1.0', 'sdk_gmail-unsub_b0981f697a').then(function(sdk){
   sdk.Lists.registerThreadRowViewHandler(function(ThreadRowView){
    emailsRead++;
 
-   function archiveMail(e){
+   function archiveMail(e,type){
      var port = chrome.runtime.connect({name:'archive'});
      var idMsg = ThreadRowView.getThreadIDIfStable()
      var sender = ThreadRowView.getContacts();
      port.postMessage({id:idMsg, from:sender[0].emailAddress});
+     var html = '';
+     var time = 0;
+     if (type == "email"){
+       // we just unsubscribed by sending an email
+          html += "You were unsubscribed automagically. "
+          time -= 10000
+     }
+
      port.onMessage.addListener(function(msg){
       if (msg.archived){
+        if (html !== ''){
+          html += "Also, t";
+        }
+        else{
+          html+= "T";
+        }
         if (msg.nEmailsFrom == 0){
-          var html = "The conversation has been archived.";
+          html += "he conversation was archived";
         }
         else if (msg.nEmailsFrom == 1){
-          var html = "The conversation has been archived. <span style='text-decoration:underline' class='bulkArchive' email='"+sender[0].emailAddress+"' nEmailsFrom='"+msg.nEmailsFrom+"'>Archive "+msg.nEmailsFrom+" email from "+ sender[0].emailAddress + "</span>"
+          html += "he conversation was archived. <br> We found "+msg.nEmailsFrom+" other email from "+ sender[0].emailAddress + " in your mailbox. <span style='text-decoration:underline' class='bulkArchive' email='"+sender[0].emailAddress+"' nEmailsFrom='"+msg.nEmailsFrom+"'>Archive it ?</span>"
         }
         else if (msg.nEmailsFrom > 1){
-          var html = "The conversation has been archived. <span style='text-decoration:underline' class='bulkArchive' email='"+sender[0].emailAddress+"' nEmailsFrom='"+msg.nEmailsFrom+"'>Archive all "+msg.nEmailsFrom+" emails from "+ sender[0].emailAddress + "</span>"
+          html += "he conversation was archived. <br> We found "+msg.nEmailsFrom+" other emails from "+ sender[0].emailAddress + " in your mailbox. <span style='text-decoration:underline' class='bulkArchive' email='"+sender[0].emailAddress+"' nEmailsFrom='"+msg.nEmailsFrom+"'>Archive all ?</span>"
         }
         sdk.ButterBar.showMessage({
           'text':'',
-          'time':30000,
+          'time':time+20000,
           'html':html
         })
         var row = document.querySelector("tr.inboxsdk__thread_row[data-inboxsdk-threadid='"+idMsg+"'");
@@ -63,11 +77,19 @@ InboxSDK.load('1.0', 'sdk_gmail-unsub_b0981f697a').then(function(sdk){
             //port.postMessage({type:"link-found", countEmails: ThreadRowView.getVisibleMessageCount()});
             ThreadRowView.addActionButton({
               'type':"LINK",
-              'title': "Unsubscribe (m)",
-              'url': "http://tuz.com",
-              'onClick': function(){sendArchiveMail(email);}
+              'title': "Unsubscribe",
+              'url': "http://you-should-be-unsubscribed-and-not-see-this-page.com/",
+              'onClick': function(){
+                sendArchiveMail(email);
+                // sdk.ButterBar.showMessage({
+                //       'text':"An email was sent to unsubscribe you from this mailing list.",
+                //       'time':5000,
+                //       'priority':1
+                // })
+                archiveMail(email, "email");
+              }
             });
-            console.log(ThreadRowView);
+            //console.log(ThreadRowView);
           }
         }
         else if (msg.type == "url"){
@@ -98,7 +120,7 @@ InboxSDK.load('1.0', 'sdk_gmail-unsub_b0981f697a').then(function(sdk){
     port.postMessage({'email': email, 'nEmailsFrom': nEmailsFrom });
     var currentRouteView = sdk.Router.getCurrentRouteView();
     //console.log(listRouteView.getRouteID())
-    console.log(currentRouteView.getRouteID())
+    //console.log(currentRouteView.getRouteID())
 
     sdk.Router.handleListRoute(currentRouteView.getRouteID(), function(listRouteView) {
       setTimeout(function(){ listRouteView.refresh(); }, 1000);
